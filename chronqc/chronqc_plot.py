@@ -291,10 +291,10 @@ def box_whisker_plot(df, ColumnName, Type='', lower_threshold=np.nan, upper_thre
     if 'Sample' not in df_copy.columns:
         df_copy['Sample'] = df_copy['Run']
     # Get quantiles  25, 50 and 75 %
-    df_bp = df_copy.groupby('First_Date')[ColumnName].describe()
+    df_bp = df_copy.groupby('Date')[ColumnName].describe()
     df_bp = pd.DataFrame(df_bp, columns=['25%', '50%', '75%']).reset_index()
     # Get BP data
-    bp = pd.DataFrame.boxplot(df_copy, by='First_Date', return_type='dict')
+    bp = pd.DataFrame.boxplot(df_copy, by='Date', return_type='dict')
     a = bp[ColumnName]
     outliers = [flier.get_ydata() for flier in a["fliers"]]
 #    boxes = [box.get_ydata() for box in a["boxes"]] # not needed
@@ -321,18 +321,17 @@ def box_whisker_plot(df, ColumnName, Type='', lower_threshold=np.nan, upper_thre
         outlier_df = outlier_df.reset_index(level=1, drop=True)
         outlier_df.rename(columns={0: 'Outlier'}, inplace=True)
         # Group runs and sample names in dataset
-        gp_df_run = df_copy.groupby(['First_Date', ColumnName])['Run'].agg(lambda x: ', '.join(x)).reset_index()
-        gp_df_samp = df_copy.groupby(['First_Date', ColumnName])['Sample'].agg(lambda x: ', '.join(x)).reset_index()
+        gp_df_run = df_copy.groupby(['Date', ColumnName])['Run'].agg(lambda x: ', '.join(x)).reset_index()
+        gp_df_samp = df_copy.groupby(['Date', ColumnName])['Sample'].agg(lambda x: ', '.join(x)).reset_index()
         df_names = pd.merge(gp_df_run, gp_df_samp, left_index=True,
                             right_index=True, how='outer', suffixes=['', 'y'])
         # add outliers to bp
         df_bp = pd.merge(df_bp, outlier_df, left_index=True, right_index=True,
                          how='left')
         # Add labels to bp
-        df_bp = pd.merge(df_bp, df_names, left_on=['First_Date', 'Outlier'],
-                         right_on=['First_Date', ColumnName], how='left')
+        df_bp = pd.merge(df_bp, df_names, left_on=['Date', 'Outlier'],
+                         right_on=['Date', ColumnName], how='left')
     # keeps only columns needed
-    df_bp.rename(columns={'First_Date': 'Date'}, inplace=True)
     df_bp = pd.DataFrame(df_bp, columns=['Date', '25%', '75%', 'Upper_whisker',
                                          'Lower_whisker', '50%', 'Outlier',
                                          'Run', 'Sample'])
