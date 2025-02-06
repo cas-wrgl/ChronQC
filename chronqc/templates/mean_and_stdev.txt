@@ -35,7 +35,7 @@
 			rangeSelectorPlotStrokeColor: "rgba(0,0,0,0)",
 			highlightSeriesOpts: { highlightCircleSize : 5 },
 			interactionModel: Dygraph.defaultInteractionModel,
-			includeZero: true,	
+			includeZero: false,	
 			displayAnnotations: true,
 			axisLabelFontSize: 10,
 			titleHeight: 25,

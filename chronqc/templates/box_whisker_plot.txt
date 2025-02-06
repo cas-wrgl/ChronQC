@@ -23,7 +23,7 @@
 			labelsDiv: document.getElementById("$labeldiv"),
 			labelsSeparateLines: true,
 			showRangeSelector: true,
-			includeZero: true,
+			includeZero: false,
 			rangeSelectorHeight: 20,
 			rangeSelectorPlotFillColor: "rgba(0,0,0,0)",
 			rangeSelectorPlotFillGradientColor: "rgba(0,0,0,0)",
